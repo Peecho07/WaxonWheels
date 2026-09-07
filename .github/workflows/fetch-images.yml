@@ -1,0 +1,63 @@
+# One-shot helper: pulls the images the pages currently hotlink from
+# waxonwheels.com into assets/images/ and commits them, so the site can stop
+# depending on that host being up. Delete this workflow once it has run.
+name: Fetch site images
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download hotlinked images
+        run: |
+          set -uo pipefail
+          mkdir -p assets/images
+
+          grep -oh 'https://waxonwheels\.com/wp-content/uploads/[^"'"'"' )]*' \
+            *.html assets/styles.css 2>/dev/null \
+            | sed "s/[)\"']//g" | sort -u > /tmp/urls.txt
+
+          echo "Found $(wc -l < /tmp/urls.txt) unique image URLs"
+          fail=0
+          while read -r url; do
+            [ -z "$url" ] && continue
+            name="${url##*/}"
+            if curl -fsSL --retry 3 --retry-delay 2 --max-time 60 \
+                 -o "assets/images/$name" "$url"; then
+              # A WordPress error page returns 200 with HTML, so check the bytes.
+              type=$(file -b --mime-type "assets/images/$name")
+              case "$type" in
+                image/*) printf '  ok    %-46s %s\n' "$name" "$type" ;;
+                *) printf '  BAD   %-46s %s\n' "$name" "$type"; rm -f "assets/images/$name"; fail=$((fail+1)) ;;
+              esac
+            else
+              printf '  FAIL  %s\n' "$name"
+              rm -f "assets/images/$name"
+              fail=$((fail+1))
+            fi
+          done < /tmp/urls.txt
+
+          echo "----"
+          echo "downloaded: $(ls -1 assets/images | wc -l)"
+          echo "failed:     $fail"
+          du -sh assets/images
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/images
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "Add site images downloaded from waxonwheels.com" \
+                       -m "Fetched by .github/workflows/fetch-images.yml so the pages can reference local copies instead of hotlinking the live WordPress site."
+            git push
+          fi
