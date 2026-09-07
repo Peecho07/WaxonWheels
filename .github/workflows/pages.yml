@@ -26,11 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # enablement creates the Pages site and points it at Actions if the
-      # repository has no Pages configuration yet, instead of failing.
+      # Requires Settings > Pages > Source = "GitHub Actions". The workflow
+      # token is not allowed to create the Pages site itself, so that toggle
+      # has to be set by hand once.
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3

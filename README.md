@@ -44,9 +44,21 @@ needs a server-like path resolution.
 ## Deployment
 
 `.github/workflows/pages.yml` uploads the repository root as a Pages artifact and
-deploys it on every push. For it to run, **Settings → Pages → Build and
-deployment → Source** must be set to **GitHub Actions** (not "Deploy from a
-branch").
+deploys it on every push.
+
+### One-time setup
+
+Pages has to be switched on by hand before the workflow can succeed. The
+workflow's `GITHUB_TOKEN` is not permitted to create a Pages site, so this
+cannot be automated from inside the repository.
+
+1. Go to **Settings → Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**
+   (not "Deploy from a branch").
+3. Re-run the latest run under the **Actions** tab, or push any commit.
+
+Until that is done every run fails at the `actions/configure-pages` step with
+`Get Pages site failed ... Not Found`.
 
 ## What `site.js` does
 
