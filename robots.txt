@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://peecho07.github.io/WaxonWheels/sitemap.xml
