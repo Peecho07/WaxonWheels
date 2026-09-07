@@ -17,6 +17,7 @@ Live site: <https://peecho07.github.io/WaxonWheels/>
 ├── contact.html               Contact and quote request
 ├── 404.html                   Not-found page (served by GitHub Pages)
 ├── assets/
+│   ├── images/                Site photography (62 files)
 │   ├── styles.css             All styling
 │   └── site.js                All behaviour, no dependencies
 ├── robots.txt
@@ -72,11 +73,9 @@ Everything is progressive — the pages are readable with JavaScript switched of
 
 ## Known follow-ups
 
-- **Images are hotlinked** from `https://waxonwheels.com/wp-content/uploads/...`
-  rather than committed to this repository. If that domain goes away or blocks
-  hotlinking, every photo on the site breaks. Downloading them into
-  `assets/img/` and rewriting the `src` attributes would make the site
-  self-contained.
+- **Image weight.** The 62 photos in `assets/images/` total about 14 MB and are
+  served at full resolution. Converting them to WebP, or generating smaller
+  variants for the grid thumbnails, would cut page weight substantially.
 - **Forms have no backend.** They open the visitor's email client, which means
   an enquiry is lost if the visitor has no mail client configured. A form
   service (Formspree, Netlify Forms, a small serverless function) would capture
