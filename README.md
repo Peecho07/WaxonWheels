@@ -1,83 +1,25 @@
-# Wax On Wheels
+# Wax On Wheels: Website Demo
 
-Static marketing site for **Wax On Wheels**, a mobile auto detailing company serving
-Palm Beach County, Florida since 2004.
+Built on spec by tsKaizen, using the same design scheme as the Patty's Detail demo. Every price, service, phone number and photo comes from the current Wax On Wheels site. The logo is cut from their own header banner, and the red and yellow are sampled from it.
 
-Live site: <https://peecho07.github.io/WaxonWheels/>
+Live: https://peecho07.github.io/WaxonWheels/
 
-## Layout
+| Page | File |
+|---|---|
+| Home | index.html |
+| Detailing & Plans | detailing.html |
+| Paint & Headlights | paint-headlights.html |
+| RV & Horse Trailers | rv-trailers.html |
+| Boats & Motorcycles | boats-motorcycles.html |
+| Gallery | gallery.html |
+| Our Company | our-company.html |
+| Gift Certificates | gift-certificates.html |
+| Contact / Free Quote | contact.html |
 
-```
-.
-├── index.html                 Home
-├── our-company.html           About the company
-├── detailing-services.html    Full service list and pricing (anchored sections)
-├── gallery.html               Photo gallery with lightbox
-├── gift-certificates.html     Gift certificates
-├── contact.html               Contact and quote request
-├── 404.html                   Not-found page (served by GitHub Pages)
-├── assets/
-│   ├── images/                Site photography (62 files)
-│   ├── styles.css             All styling
-│   └── site.js                All behaviour, no dependencies
-├── robots.txt
-├── sitemap.xml
-├── .nojekyll                  Serve files as-is, skip Jekyll processing
-└── .github/workflows/pages.yml
-```
+`detailing-services.html` forwards old links (including #anchors) to the new pages.
 
-There is no build step. The pages are plain HTML and link to `assets/styles.css`
-and `assets/site.js` with relative paths, so the site works from any subdirectory
-and from a custom domain without changes.
+## Before launch
 
-## Running it locally
-
-Any static file server will do. From the repository root:
-
-```sh
-python3 -m http.server 8000
-```
-
-Then open <http://localhost:8000>. Opening the `.html` files directly with
-`file://` also works, though the relative asset paths are the only thing that
-needs a server-like path resolution.
-
-## Deployment
-
-`.github/workflows/pages.yml` uploads the repository root as a Pages artifact and
-deploys it on every push.
-
-### One-time setup
-
-Pages has to be switched on by hand before the workflow can succeed. The
-workflow's `GITHUB_TOKEN` is not permitted to create a Pages site, so this
-cannot be automated from inside the repository.
-
-1. Go to **Settings → Pages**.
-2. Under **Build and deployment**, set **Source** to **GitHub Actions**
-   (not "Deploy from a branch").
-3. Re-run the latest run under the **Actions** tab, or push any commit.
-
-Until that is done every run fails at the `actions/configure-pages` step with
-`Get Pages site failed ... Not Found`.
-
-## What `site.js` does
-
-Everything is progressive — the pages are readable with JavaScript switched off.
-
-- Mobile navigation drawer, with collapsible submenus, outside-click and `Escape` to close
-- FAQ accordions
-- A sticky call bar that appears on phones once the hero has scrolled past
-- Gallery lightbox, dismissed by click, `Escape`, or a downward swipe
-- Contact and quote forms hand off to the visitor's mail client via `mailto:`
-
-## Known follow-ups
-
-- **Image weight.** The 62 photos in `assets/images/` total about 14 MB and are
-  served at full resolution. Converting them to WebP, or generating smaller
-  variants for the grid thumbnails, would cut page weight substantially.
-- **Forms have no backend.** They open the visitor's email client, which means
-  an enquiry is lost if the visitor has no mail client configured. A form
-  service (Formspree, Netlify Forms, a small serverless function) would capture
-  these reliably.
-- **Terms of Use and Privacy Policy** in the footer link to `#` and need real pages.
+- The quote form opens the visitor's email app addressed to waxonwheelspbc@gmail.com. Swap in Formspree or Netlify Forms to capture leads reliably.
+- The old build used `trailer.jpg`, which shows a different company's trailer ("Watch It Sparkle"). It is no longer used.
+- Confirm prices are still current with the owner.
